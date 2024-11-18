@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from "react";
+import React, { useState, useEffect} from "react";
 import "./BoardModal.css"; 
 import TextBannerJogo from './TextBannerJogo';
 
@@ -16,11 +16,15 @@ const BoardModal = () => {
     const [imagemPlayer, setImagemPlayer] = useState("guerreiro.png");
     const [imagemEnemy, setImagemEnemy] = useState("ladino.png");
 
+    const [valorzero, setvalorzero] = useState(0);
+
 
     const [HitGifPlayer, setHitGifPlayer] = useState("attackgif.gif");
     const [HitGifEnemy, setHitGifEnemy] = useState("attackgif.gif");
     const [hiddenHitGifPlayer, setHiddenHitGifPlayer] = useState(true);
     const [hiddenHitGifEnemy, setHiddenHitGifEnemy] = useState(true);
+
+
 
 
 
@@ -132,25 +136,44 @@ const BoardModal = () => {
         console.log('Valor do dado:', valorDadoPlayer); 
     };
 //============================================
-    const causarDano = () => {
-        console.log("somadadoPlayer "+somadadoPlayer);
-      
-        setImagemBotao("diceVazio.png");
-        setVidaEnemy((prevSoma) => prevSoma - somadadoPlayer);
-     
-        setIsDisabled(true);
-        setIsDisabled2(true);
-     
-        somasetNumeroPlayer((prevSoma) => prevSoma = 0);
 
-        setHiddenHitGifEnemy(false);
+const acabou = () => {
+    closeModal();
+}
 
-        setTimeout(() => {
-            setHiddenHitGifEnemy(true);
-            gerarNumeroEnemy();
-            }, 600);
-        
+useEffect(() => {
+    if (vidaEnemy < 1) {
+        alert("Você ganhou!");
+        acabou();
     }
+}, [vidaEnemy]);
+
+useEffect(() => {
+    if (vidaPlayer < 1) {
+        alert("Você Perdeu!");
+        acabou();
+    }
+}, [vidaPlayer]);
+
+const causarDano = () => {
+    console.log("somadadoPlayer " + somadadoPlayer);
+
+    setImagemBotao("diceVazio.png");
+    setVidaEnemy((prevSoma) => prevSoma - somadadoPlayer);
+
+    setIsDisabled(true);
+    setIsDisabled2(true);
+    setvalorzero(0);
+
+    setHiddenHitGifEnemy(false);
+    somasetNumeroPlayer((prevSoma) => prevSoma = 0);
+
+    setTimeout(() => {
+        setHiddenHitGifEnemy(true);
+        gerarNumeroEnemy();
+    }, 600);
+};
+
 
 //================================================
     const [isOpen, setIsOpen] = useState(false);
